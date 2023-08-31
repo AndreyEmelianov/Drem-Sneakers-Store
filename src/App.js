@@ -6,7 +6,7 @@ function App() {
 					<img width={40} height={40} src="/img/logo.png" alt="Логотип магазина" />
 					<div>
 						<h3 className="text-uppercase">Drem Sneakers</h3>
-						<p>Магазин модных кроссовок</p>
+						<p className="opacity-5">Магазин модных кроссовок</p>
 					</div>
 				</div>
 
@@ -22,7 +22,13 @@ function App() {
 			</header>
 
 			<div className="content p-40">
-				<h1 className="mb-40">Все кроссовки</h1>
+				<div className="d-flex align-center justify-between mb-40">
+					<h1>Все кроссовки</h1>
+					<div className="search-block d-flex">
+						<img src="/img/search.svg" alt="иконка поиска" />
+						<input type="text" placeholder="Поиск..." />
+					</div>
+				</div>
 
 				<div className="d-flex">
 					<div className="card">
