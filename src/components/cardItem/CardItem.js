@@ -1,7 +1,9 @@
+import styles from './CardItem.module.scss';
+
 const CardItem = () => {
 	return (
-		<div className="card">
-			<div className="favorite">
+		<div className={styles.card}>
+			<div className={styles.favorite}>
 				<img src="/img/unliked.svg" alt="иконка избранное неактивная" />
 			</div>
 
@@ -12,9 +14,8 @@ const CardItem = () => {
 					<span>Цена:</span>
 					<b>12 999 руб.</b>
 				</div>
-				<button className="button">
-					<img width={11} height={11} src="/img/plus.svg" alt="кнопка добавить" />
-				</button>
+
+				<img src="/img/btn-plus.svg" alt="кнопка добавить" className={styles.plus} />
 			</div>
 		</div>
 	);
