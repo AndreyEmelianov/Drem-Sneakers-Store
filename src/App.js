@@ -5,6 +5,8 @@ import Header from './components/header/Header';
 
 function App() {
 	const [sneakersItems, setSneakersItems] = useState([]);
+	const [cartItems, setCartItems] = useState([]);
+	const [isCartOpen, setIsCartOpen] = useState(false);
 
 	useEffect(() => {
 		fetch('https://64f1fd3f0e1e60602d24874a.mockapi.io/sneakersItems')
@@ -14,8 +16,8 @@ function App() {
 
 	return (
 		<div className="wrapper clear">
-			<Drawer />
-			<Header />
+			{isCartOpen && <Drawer cartItems={cartItems} closeCart={() => setIsCartOpen(false)} />}
+			<Header openCart={() => setIsCartOpen(true)} />
 			<div className="content p-40">
 				<div className="d-flex align-center justify-between mb-40">
 					<h1>Все кроссовки</h1>
