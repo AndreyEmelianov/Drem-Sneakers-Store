@@ -1,6 +1,13 @@
+import { useState } from 'react';
 import styles from './CardItem.module.scss';
 
 const CardItem = () => {
+	const [isAddToCart, setIsAddToCart] = useState(false);
+
+	const onClickAddToCart = () => {
+		setIsAddToCart(!isAddToCart);
+	};
+
 	return (
 		<div className={styles.card}>
 			<div className={styles.favorite}>
@@ -15,7 +22,12 @@ const CardItem = () => {
 					<b>12 999 руб.</b>
 				</div>
 
-				<img src="/img/btn-plus.svg" alt="кнопка добавить" className={styles.plus} />
+				<img
+					onClick={onClickAddToCart}
+					className={styles.plus}
+					src={isAddToCart ? 'img/btn-checked.svg' : '/img/btn-plus.svg'}
+					alt="кнопка добавить"
+				/>
 			</div>
 		</div>
 	);
