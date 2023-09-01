@@ -7,6 +7,7 @@ function App() {
 	const [sneakersItems, setSneakersItems] = useState([]);
 	const [cartItems, setCartItems] = useState([]);
 	const [isCartOpen, setIsCartOpen] = useState(false);
+	const [searchValue, setSearchValue] = useState('');
 
 	useEffect(() => {
 		fetch('https://64f1fd3f0e1e60602d24874a.mockapi.io/sneakersItems')
@@ -14,26 +15,49 @@ function App() {
 			.then((data) => setSneakersItems(data));
 	}, []);
 
+	const onAddToCart = (obj) => {
+		setCartItems((prev) => [...prev, obj]);
+	};
+
+	const onChangeSearchInput = (event) => {
+		setSearchValue(event.target.value);
+	};
+
 	return (
 		<div className="wrapper clear">
 			{isCartOpen && <Drawer cartItems={cartItems} closeCart={() => setIsCartOpen(false)} />}
 			<Header openCart={() => setIsCartOpen(true)} />
 			<div className="content p-40">
 				<div className="d-flex align-center justify-between mb-40">
-					<h1>Все кроссовки</h1>
+					<h1>{searchValue ? `Поиск по запросу: ${searchValue} ` : 'Все кроссовки'}</h1>
 					<div className="search-block d-flex">
 						<img src="/img/search.svg" alt="иконка поиска" />
-						<input type="text" placeholder="Поиск..." />
+						{searchValue && (
+							<img
+								onClick={() => setSearchValue('')}
+								className="clear cu-p"
+								src="/img/btn-remove.svg"
+								alt="кнопка удалить"
+							/>
+						)}
+
+						<input
+							value={searchValue}
+							onChange={onChangeSearchInput}
+							type="text"
+							placeholder="Поиск..."
+						/>
 					</div>
 				</div>
 
 				<div className="d-flex flex-wrap">
-					{sneakersItems.map((sneakersItem) => (
+					{sneakersItems.map((sneakersItem, index) => (
 						<CardItem
-							key={sneakersItem.imageUrl}
+							key={index}
 							imageUrl={sneakersItem.imageUrl}
 							title={sneakersItem.title}
 							price={sneakersItem.price}
+							onPlus={(obj) => onAddToCart(obj)}
 						/>
 					))}
 				</div>
