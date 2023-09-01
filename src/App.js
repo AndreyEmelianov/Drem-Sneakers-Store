@@ -51,15 +51,19 @@ function App() {
 				</div>
 
 				<div className="d-flex flex-wrap">
-					{sneakersItems.map((sneakersItem, index) => (
-						<CardItem
-							key={index}
-							imageUrl={sneakersItem.imageUrl}
-							title={sneakersItem.title}
-							price={sneakersItem.price}
-							onPlus={(obj) => onAddToCart(obj)}
-						/>
-					))}
+					{sneakersItems
+						.filter((sneakersItem) =>
+							sneakersItem.title.toLowerCase().includes(searchValue.toLowerCase())
+						)
+						.map((filteredSneakersItem, index) => (
+							<CardItem
+								key={index}
+								imageUrl={filteredSneakersItem.imageUrl}
+								title={filteredSneakersItem.title}
+								price={filteredSneakersItem.price}
+								onPlus={(obj) => onAddToCart(obj)}
+							/>
+						))}
 				</div>
 			</div>
 		</div>
