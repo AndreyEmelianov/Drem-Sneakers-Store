@@ -15,6 +15,15 @@ const Header = ({ openCart }) => {
 					<span>1205 руб.</span>
 				</li>
 				<li>
+					<img
+						className="mr-20 cu-p"
+						width={18}
+						height={18}
+						src="/img/heart.svg"
+						alt="иконка избранное"
+					/>
+				</li>
+				<li>
 					<img width={18} height={18} src="/img/user.svg" alt="иконка профиля" />
 				</li>
 			</ul>

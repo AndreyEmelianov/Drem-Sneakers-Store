@@ -13,7 +13,7 @@ const Drawer = ({ closeCart, cartItems = [], onRemoveCartItem }) => {
 				</h2>
 
 				{cartItems.length > 0 ? (
-					<div>
+					<>
 						<div className="items">
 							{cartItems.map((cartItem) => (
 								<div className="cartItem d-flex align-center mb-20" key={cartItem.id}>
@@ -52,7 +52,7 @@ const Drawer = ({ closeCart, cartItems = [], onRemoveCartItem }) => {
 								Оформить заказ <img src="/img/arrow.svg" alt="иконка стрелочки" />
 							</button>
 						</div>
-					</div>
+					</>
 				) : (
 					<div className="cartEmpty d-flex align-center justify-center flex-column flex">
 						<img
