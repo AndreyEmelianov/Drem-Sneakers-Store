@@ -15,25 +15,37 @@ function App() {
 	const [favorites, setFavorites] = useState([]);
 
 	useEffect(() => {
-		axios
-			.get('https://64f1fd3f0e1e60602d24874a.mockapi.io/sneakersItems')
-			.then((res) => setSneakersItems(res.data));
+		async function fetchData() {
+			const cartResponse = await axios.get('https://64f1fd3f0e1e60602d24874a.mockapi.io/cart');
 
-		axios
-			.get('https://64f1fd3f0e1e60602d24874a.mockapi.io/cart')
-			.then((res) => setCartItems(res.data));
-		axios
-			.get('https://64f22c220e1e60602d24d9c0.mockapi.io/favorites')
-			.then((res) => setFavorites(res.data));
+			const favoritesResponse = await axios.get(
+				'https://64f22c220e1e60602d24d9c0.mockapi.io/favorites'
+			);
+
+			const sneakersItemsResponse = await axios.get(
+				'https://64f1fd3f0e1e60602d24874a.mockapi.io/sneakersItems'
+			);
+
+			setCartItems(cartResponse.data);
+			setFavorites(favoritesResponse.data);
+			setSneakersItems(sneakersItemsResponse.data);
+		}
+
+		fetchData();
 	}, []);
 
 	const onAddToCart = async (obj) => {
-		if (cartItems.find((cartItem) => cartItem.id === obj.id)) {
-			return;
-		} else {
-			const { data } = await axios.post('https://64f1fd3f0e1e60602d24874a.mockapi.io/cart', obj);
+		try {
+			if (cartItems.find((cartItem) => Number(cartItem.id) === Number(obj.id))) {
+				axios.delete(`https://64f1fd3f0e1e60602d24874a.mockapi.io/cart/${obj.id}`);
+				setCartItems((prev) => prev.filter((item) => Number(item.id) !== Number(obj.id)));
+			} else {
+				const { data } = await axios.post('https://64f1fd3f0e1e60602d24874a.mockapi.io/cart', obj);
 
-			setCartItems((prev) => [...prev, data]);
+				setCartItems((prev) => [...prev, data]);
+			}
+		} catch (error) {
+			alert('Не удалось добавить товар в корзину');
 		}
 	};
 
@@ -44,16 +56,20 @@ function App() {
 	};
 
 	const onAddToFavorite = async (obj) => {
-		if (favorites.find((favorite) => favorite.id === obj.id)) {
-			axios.delete(`https://64f22c220e1e60602d24d9c0.mockapi.io/favorites/${obj.id}`);
-			setFavorites((prev) => prev.filter((item) => item.id !== obj.id));
-		} else {
-			const { data } = await axios.post(
-				`https://64f22c220e1e60602d24d9c0.mockapi.io/favorites`,
-				obj
-			);
+		try {
+			if (favorites.find((favorite) => favorite.id === obj.id)) {
+				axios.delete(`https://64f22c220e1e60602d24d9c0.mockapi.io/favorites/${obj.id}`);
+				setFavorites((prev) => prev.filter((item) => item.id !== obj.id));
+			} else {
+				const { data } = await axios.post(
+					`https://64f22c220e1e60602d24d9c0.mockapi.io/favorites`,
+					obj
+				);
 
-			setFavorites((prev) => [...prev, data]);
+				setFavorites((prev) => [...prev, data]);
+			}
+		} catch (error) {
+			alert('Не удалось добавить в избранное');
 		}
 	};
 
@@ -74,10 +90,11 @@ function App() {
 
 			<Route path="/" exact>
 				<Home
+					sneakersItems={sneakersItems}
+					cartItems={cartItems}
 					searchValue={searchValue}
 					setSearchValue={setSearchValue}
 					onChangeSearchInput={onChangeSearchInput}
-					sneakersItems={sneakersItems}
 					onAddToCart={onAddToCart}
 					onAddToFavorite={onAddToFavorite}
 				/>

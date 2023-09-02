@@ -1,13 +1,22 @@
 import { useState } from 'react';
 import styles from './CardItem.module.scss';
 
-const CardItem = ({ imageUrl, title, price, onPlus, onFavorite, favorited = false, id }) => {
-	const [isAddToCart, setIsAddToCart] = useState(false);
+const CardItem = ({
+	imageUrl,
+	title,
+	price,
+	onPlus,
+	onFavorite,
+	favorited = false,
+	id,
+	isAddedToCart = false,
+}) => {
+	const [isAddToCart, setIsAddToCart] = useState(isAddedToCart);
 	const [isFavorite, setIsFavorite] = useState(favorited);
 
 	const onClickAddToCart = () => {
-		setIsAddToCart(!isAddToCart);
 		onPlus({ title, price, imageUrl, id });
+		setIsAddToCart(!isAddToCart);
 	};
 
 	const onClickFavorite = () => {

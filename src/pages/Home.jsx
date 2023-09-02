@@ -1,6 +1,7 @@
 import CardItem from '../components/cardItem/CardItem';
 
 const Home = ({
+	cartItems,
 	searchValue,
 	setSearchValue,
 	onChangeSearchInput,
@@ -46,6 +47,9 @@ const Home = ({
 							price={filteredSneakersItem.price}
 							onPlus={(obj) => onAddToCart(obj)}
 							onFavorite={(obj) => onAddToFavorite(obj)}
+							isAddedToCart={cartItems.some(
+								(cartItem) => Number(cartItem.id) === Number(filteredSneakersItem.id)
+							)}
 						/>
 					))}
 			</div>
