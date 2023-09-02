@@ -100,7 +100,7 @@ function App() {
 			<div className="wrapper clear">
 				{isCartOpen && (
 					<Drawer
-						cartItems={cartItems}
+						// cartItems={cartItems}
 						closeCart={() => setIsCartOpen(false)}
 						onRemoveCartItem={onRemoveCartItem}
 					/>

@@ -3,12 +3,14 @@ import Info from '../info/Info';
 import AppContext from '../../context/context';
 import axios from 'axios';
 
-const Drawer = ({ closeCart, cartItems = [], onRemoveCartItem }) => {
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const Drawer = ({ closeCart, onRemoveCartItem }) => {
 	const [isOrderComplete, setIsOrderComplete] = useState(false);
 	const [orderId, setOrderId] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
 
-	const { setCartItems } = useContext(AppContext);
+	const { setCartItems, cartItems } = useContext(AppContext);
 
 	const onClickOrder = async () => {
 		try {
@@ -20,6 +22,12 @@ const Drawer = ({ closeCart, cartItems = [], onRemoveCartItem }) => {
 			setOrderId(data.id);
 			setIsOrderComplete(true);
 			setCartItems([]);
+
+			for (let i = 0; i < cartItems; i++) {
+				const item = cartItems[i];
+				await axios.delete('https://64f1fd3f0e1e60602d24874a.mockapi.io/cart/' + item.id);
+				await delay(1000);
+			}
 		} catch (error) {
 			alert('Ошибка при создании заказа');
 		}
