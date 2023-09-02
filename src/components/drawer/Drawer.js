@@ -1,4 +1,32 @@
+import { useContext, useState } from 'react';
+import Info from '../info/Info';
+import AppContext from '../../context/context';
+import axios from 'axios';
+
 const Drawer = ({ closeCart, cartItems = [], onRemoveCartItem }) => {
+	const [isOrderComplete, setIsOrderComplete] = useState(false);
+	const [orderId, setOrderId] = useState(null);
+	const [isLoading, setIsLoading] = useState(false);
+
+	const { setCartItems } = useContext(AppContext);
+
+	const onClickOrder = async () => {
+		try {
+			setIsLoading(true);
+			const { data } = await axios.post('https://64f22c220e1e60602d24d9c0.mockapi.io/orders', {
+				items: cartItems,
+			});
+
+			setOrderId(data.id);
+			setIsOrderComplete(true);
+			setCartItems([]);
+		} catch (error) {
+			alert('Ошибка при создании заказа');
+		}
+
+		setIsLoading(false);
+	};
+
 	return (
 		<div className="overlay">
 			<div className="drawer">
@@ -48,27 +76,21 @@ const Drawer = ({ closeCart, cartItems = [], onRemoveCartItem }) => {
 									<b>1075 руб. </b>
 								</li>
 							</ul>
-							<button className="greenButton">
+							<button disabled={isLoading} className="greenButton" onClick={onClickOrder}>
 								Оформить заказ <img src="/img/arrow.svg" alt="иконка стрелочки" />
 							</button>
 						</div>
 					</div>
 				) : (
-					<div className="cartEmpty d-flex align-center justify-center flex-column flex">
-						<img
-							className="mb-20"
-							width={120}
-							height={120}
-							src="/img/empty-cart.jpg"
-							alt="корзина пуста"
-						/>
-						<h2>Корзина пустая</h2>
-						<p className="opacity-6">Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ</p>
-						<button onClick={closeCart} className="greenButton">
-							<img src="/img/arrow.svg" alt="иконка стрелочки назад" />
-							Вернуться назад
-						</button>
-					</div>
+					<Info
+						title={isOrderComplete ? 'Заказ успешно оформлен!' : 'Корзина пустая'}
+						description={
+							isOrderComplete
+								? `Ваш заказ #${orderId} скоро будет передан курьерской доставке`
+								: 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ'
+						}
+						image={isOrderComplete ? '/img/complete-order.jpg' : '/img/empty-cart.jpg'}
+					/>
 				)}
 			</div>
 		</div>
