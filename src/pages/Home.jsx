@@ -8,7 +8,27 @@ const Home = ({
 	sneakersItems,
 	onAddToCart,
 	onAddToFavorite,
+	isLoading,
 }) => {
+	const renderSneakersItems = () => {
+		const filteredItems = sneakersItems.filter((sneakersItem) =>
+			sneakersItem.title.toLowerCase().includes(searchValue.toLowerCase())
+		);
+
+		return (isLoading ? [...Array(12)] : filteredItems).map((filteredSneakersItem, index) => (
+			<CardItem
+				key={index}
+				onPlus={(obj) => onAddToCart(obj)}
+				onFavorite={(obj) => onAddToFavorite(obj)}
+				isAddedToCart={cartItems.some(
+					(cartItem) => Number(cartItem.id) === Number(filteredSneakersItem.id)
+				)}
+				isLoading={isLoading}
+				{...filteredSneakersItem}
+			/>
+		));
+	};
+
 	return (
 		<div className="content p-40">
 			<div className="d-flex align-center justify-between mb-40">
@@ -33,26 +53,7 @@ const Home = ({
 				</div>
 			</div>
 
-			<div className="d-flex flex-wrap">
-				{sneakersItems
-					.filter((sneakersItem) =>
-						sneakersItem.title.toLowerCase().includes(searchValue.toLowerCase())
-					)
-					.map((filteredSneakersItem) => (
-						<CardItem
-							key={filteredSneakersItem.id}
-							id={filteredSneakersItem.id}
-							imageUrl={filteredSneakersItem.imageUrl}
-							title={filteredSneakersItem.title}
-							price={filteredSneakersItem.price}
-							onPlus={(obj) => onAddToCart(obj)}
-							onFavorite={(obj) => onAddToFavorite(obj)}
-							isAddedToCart={cartItems.some(
-								(cartItem) => Number(cartItem.id) === Number(filteredSneakersItem.id)
-							)}
-						/>
-					))}
-			</div>
+			<div className="d-flex flex-wrap">{renderSneakersItems()}</div>
 		</div>
 	);
 };
