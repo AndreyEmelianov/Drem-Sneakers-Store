@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import styles from './CardItem.module.scss';
 import ContentLoader from 'react-content-loader';
+import AppContext from '../../context/context';
 
 const CardItem = ({
 	id,
@@ -10,15 +11,16 @@ const CardItem = ({
 	onPlus,
 	onFavorite,
 	favorited = false,
-	isAddedToCart = false,
 	isLoading = false,
 }) => {
-	const [isAddToCart, setIsAddToCart] = useState(isAddedToCart);
+	// const [isAddToCart, setIsAddToCart] = useState(isAddedToCart);
 	const [isFavorite, setIsFavorite] = useState(favorited);
+
+	const { isAddedItemToCart } = useContext(AppContext);
 
 	const onClickAddToCart = () => {
 		onPlus({ title, price, imageUrl, id });
-		setIsAddToCart(!isAddToCart);
+		// setIsAddToCart(!isAddToCart);
 	};
 
 	const onClickFavorite = () => {
@@ -62,7 +64,7 @@ const CardItem = ({
 						<img
 							onClick={onClickAddToCart}
 							className={styles.plus}
-							src={isAddToCart ? 'img/btn-checked.svg' : '/img/btn-plus.svg'}
+							src={isAddedItemToCart(id) ? 'img/btn-checked.svg' : '/img/btn-plus.svg'}
 							alt="кнопка добавить"
 						/>
 					</div>
