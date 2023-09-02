@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Route } from 'react-router-dom';
 
-import CardItem from './components/cardItem/CardItem';
 import Drawer from './components/drawer/Drawer';
 import Header from './components/header/Header';
+import Home from './pages/Home';
+import Favorites from './pages/Favorites';
 
 function App() {
 	const [sneakersItems, setSneakersItems] = useState([]);
@@ -20,12 +22,19 @@ function App() {
 		axios
 			.get('https://64f1fd3f0e1e60602d24874a.mockapi.io/cart')
 			.then((res) => setCartItems(res.data));
+		axios
+			.get('https://64f22c220e1e60602d24d9c0.mockapi.io/favorites')
+			.then((res) => setFavorites(res.data));
 	}, []);
 
 	const onAddToCart = (obj) => {
-		axios.post('https://64f1fd3f0e1e60602d24874a.mockapi.io/cart', obj);
+		if (cartItems.find((cartItem) => cartItem.id === obj.id)) {
+			return;
+		} else {
+			axios.post('https://64f1fd3f0e1e60602d24874a.mockapi.io/cart', obj);
 
-		setCartItems((prev) => [...prev, obj]);
+			setCartItems((prev) => [...prev, obj]);
+		}
 	};
 
 	const onRemoveCartItem = (id) => {
@@ -35,9 +44,14 @@ function App() {
 	};
 
 	const onAddToFavorite = (obj) => {
-		axios.post(`https://64f22c220e1e60602d24d9c0.mockapi.io/favorites`, obj);
+		if (favorites.find((favorite) => favorite.id === obj.id)) {
+			axios.delete(`https://64f22c220e1e60602d24d9c0.mockapi.io/favorites/${obj.id}`);
+			setFavorites((prev) => prev.filter((item) => item.id !== obj.id));
+		} else {
+			axios.post(`https://64f22c220e1e60602d24d9c0.mockapi.io/favorites`, obj);
 
-		setFavorites((prev) => [...prev, obj]);
+			setFavorites((prev) => [...prev, obj]);
+		}
 	};
 
 	const onChangeSearchInput = (event) => {
@@ -54,46 +68,20 @@ function App() {
 				/>
 			)}
 			<Header openCart={() => setIsCartOpen(true)} />
-			<div className="content p-40">
-				<div className="d-flex align-center justify-between mb-40">
-					<h1>{searchValue ? `Поиск по запросу: ${searchValue} ` : 'Все кроссовки'}</h1>
-					<div className="search-block d-flex">
-						<img src="/img/search.svg" alt="иконка поиска" />
-						{searchValue && (
-							<img
-								onClick={() => setSearchValue('')}
-								className="clear cu-p"
-								src="/img/btn-remove.svg"
-								alt="кнопка удалить"
-							/>
-						)}
 
-						<input
-							value={searchValue}
-							onChange={onChangeSearchInput}
-							type="text"
-							placeholder="Поиск..."
-						/>
-					</div>
-				</div>
-
-				<div className="d-flex flex-wrap">
-					{sneakersItems
-						.filter((sneakersItem) =>
-							sneakersItem.title.toLowerCase().includes(searchValue.toLowerCase())
-						)
-						.map((filteredSneakersItem, index) => (
-							<CardItem
-								key={index}
-								imageUrl={filteredSneakersItem.imageUrl}
-								title={filteredSneakersItem.title}
-								price={filteredSneakersItem.price}
-								onPlus={(obj) => onAddToCart(obj)}
-								onFavorite={(obj) => onAddToFavorite(obj)}
-							/>
-						))}
-				</div>
-			</div>
+			<Route path="/" exact>
+				<Home
+					searchValue={searchValue}
+					setSearchValue={setSearchValue}
+					onChangeSearchInput={onChangeSearchInput}
+					sneakersItems={sneakersItems}
+					onAddToCart={onAddToCart}
+					onAddToFavorite={onAddToFavorite}
+				/>
+			</Route>
+			<Route path="/favorites" exact>
+				<Favorites favoritesItems={favorites} onAddToFavorite={onAddToFavorite} />
+			</Route>
 		</div>
 	);
 }
