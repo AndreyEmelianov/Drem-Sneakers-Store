@@ -53,7 +53,7 @@ const Drawer = ({ closeCart, onRemoveCartItem, opened }) => {
 
 				{cartItems.length > 0 ? (
 					<div className="d-flex flex-column flex">
-						<div className="items">
+						<div className="items flex">
 							{cartItems.map((cartItem) => (
 								<div className="cartItem d-flex align-center mb-20" key={cartItem.id}>
 									<div
@@ -84,7 +84,7 @@ const Drawer = ({ closeCart, onRemoveCartItem, opened }) => {
 								<li>
 									<span>Налог 5%:</span>
 									<div></div>
-									<b>{(totalPrice / 100) * 5} руб. </b>
+									<b>{Math.round((totalPrice / 100) * 5)} руб. </b>
 								</li>
 							</ul>
 							<button disabled={isLoading} className="greenButton" onClick={onClickOrder}>
