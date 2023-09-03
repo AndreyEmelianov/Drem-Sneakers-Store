@@ -100,13 +100,12 @@ function App() {
 			}}
 		>
 			<div className="wrapper clear">
-				{isCartOpen && (
-					<Drawer
-						// cartItems={cartItems}
-						closeCart={() => setIsCartOpen(false)}
-						onRemoveCartItem={onRemoveCartItem}
-					/>
-				)}
+				<Drawer
+					closeCart={() => setIsCartOpen(false)}
+					onRemoveCartItem={onRemoveCartItem}
+					opened={isCartOpen}
+				/>
+
 				<Header openCart={() => setIsCartOpen(true)} />
 
 				<Route path="/" exact>

@@ -1,11 +1,14 @@
 import { useState } from 'react';
-import Info from '../info/Info';
 import axios from 'axios';
+
 import { useCart } from '../../hooks/useCart';
+import Info from '../info/Info';
+
+import styles from './Drawer.module.scss';
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
-const Drawer = ({ closeCart, onRemoveCartItem }) => {
+const Drawer = ({ closeCart, onRemoveCartItem, opened }) => {
 	const [isOrderComplete, setIsOrderComplete] = useState(false);
 	const [orderId, setOrderId] = useState(null);
 	const [isLoading, setIsLoading] = useState(false);
@@ -36,8 +39,8 @@ const Drawer = ({ closeCart, onRemoveCartItem }) => {
 	};
 
 	return (
-		<div className="overlay">
-			<div className="drawer">
+		<div className={`${styles.overlay} ${opened ? styles.overlayVisible : ''}`}>
+			<div className={styles.drawer}>
 				<h2 className="d-flex justify-between mb-30 ">
 					Корзина
 					<img
