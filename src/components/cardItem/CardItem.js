@@ -47,12 +47,14 @@ const CardItem = ({
 				</ContentLoader>
 			) : (
 				<>
-					<div className={styles.favorite} onClick={onClickFavorite}>
-						<img
-							src={isFavorite ? '/img/liked.svg' : '/img/unliked.svg'}
-							alt="иконка избранное неактивная"
-						/>
-					</div>
+					{onFavorite && (
+						<div className={styles.favorite} onClick={onClickFavorite}>
+							<img
+								src={isFavorite ? '/img/liked.svg' : '/img/unliked.svg'}
+								alt="иконка избранное неактивная"
+							/>
+						</div>
+					)}
 					<img width="100%" height={135} src={imageUrl} alt="кроссовки" />
 					<h5>{title}</h5>
 
@@ -61,12 +63,14 @@ const CardItem = ({
 							<span>Цена:</span>
 							<b>{price} руб.</b>
 						</div>
-						<img
-							onClick={onClickAddToCart}
-							className={styles.plus}
-							src={isAddedItemToCart(id) ? 'img/btn-checked.svg' : '/img/btn-plus.svg'}
-							alt="кнопка добавить"
-						/>
+						{onPlus && (
+							<img
+								onClick={onClickAddToCart}
+								className={styles.plus}
+								src={isAddedItemToCart(id) ? 'img/btn-checked.svg' : '/img/btn-plus.svg'}
+								alt="кнопка добавить"
+							/>
+						)}
 					</div>
 				</>
 			)}

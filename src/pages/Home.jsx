@@ -19,7 +19,6 @@ const Home = ({
 				key={index}
 				onPlus={(obj) => onAddToCart(obj)}
 				onFavorite={(obj) => onAddToFavorite(obj)}
-				// isAddedToCart={isAddedItemToCart(filteredSneakersItem && filteredSneakersItem.id)}
 				isLoading={isLoading}
 				{...filteredSneakersItem}
 			/>

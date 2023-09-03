@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Info from '../info/Info';
 import axios from 'axios';
-import { useCart } from '../../hooks/useCart.js';
+import { useCart } from '../../hooks/useCart';
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 

@@ -7,6 +7,7 @@ import Header from './components/header/Header';
 import Home from './pages/Home';
 import Favorites from './pages/Favorites';
 import AppContext from './context/context';
+import Orders from './pages/Orders';
 
 function App() {
 	const [sneakersItems, setSneakersItems] = useState([]);
@@ -93,6 +94,7 @@ function App() {
 				favorites,
 				isAddedItemToCart,
 				onAddToFavorite,
+				onAddToCart,
 				setIsCartOpen,
 				setCartItems,
 			}}
@@ -121,6 +123,9 @@ function App() {
 				</Route>
 				<Route path="/favorites" exact>
 					<Favorites />
+				</Route>
+				<Route path="/orders" exact>
+					<Orders />
 				</Route>
 			</div>
 		</AppContext.Provider>
